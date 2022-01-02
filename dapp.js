@@ -9,8 +9,13 @@ window.addEventListener("load", function () {
   }
 });
 
+//  2. access to Metamask
 const mmEnable = document.getElementById("mm-connect");
 
 mmEnable.onclick = async () => {
-  await console.log("clicked!");
+  await ethereum.request({ method: "eth_requestAccounts" });
+
+  const mmCurrentAccount = document.getElementById("mm-current-account");
+
+  mmCurrentAccount.innerHTML = "Current account: " + ethereum.selectedAddress;
 };
