@@ -51,19 +51,33 @@ mmEnable.onclick = async () => {
   mmCurrentAccount.innerHTML = "Current account: " + ethereum.selectedAddress;
 };
 
+// 3. send a transaction / update
 const ssSubmit = document.getElementById("ss-input-button");
+
+var web3 = new Web3(window.ethereum);
+
+const simpleStorage = new web3.eth.Contract(ssABI, ssAddress);
+
+//simpleStorage.setProvider(window.ethereum);
 
 ssSubmit.onclick = async () => {
   const ssValue = document.getElementById("ss-input-box").value;
   console.log(ssValue);
 
-  var web3 = new Web3(window.ethereum);
-
-  const simpleStorage = new web3.eth.Contract(ssABI, ssAddress);
-
-  simpleStorage.setProvider(window.ethereum);
-
   await simpleStorage.methods
     .store(ssValue)
     .send({ from: ethereum.selectedAddress });
+};
+
+// 4. read state from a contract
+const ssGetValue = document.getElementById("ss-get-value");
+
+ssGetValue.onclick = async () => {
+  console.log("clicked get value button");
+  var value = await simpleStorage.methods.retrieve().call();
+  console.log(value);
+
+  const ssDisplay = document.getElementById("ss-display-value");
+
+  ssDisplay.innerHTML = "Current Simple Storage Value: " + value;
 };
